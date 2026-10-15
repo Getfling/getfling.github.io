@@ -1,14 +1,14 @@
 {
   "mac": {
-    "version": "0.5.2",
+    "version": "0.5.3",
     "url": "https://github.com/Getfling/getfling.github.io/releases/latest/download/Fling-mac.zip"
   },
   "android": {
-    "version": "0.5.2",
+    "version": "0.5.3",
     "url": "https://github.com/Getfling/getfling.github.io/releases/latest/download/Fling-android.apk"
   },
   "windows": {
-    "version": "0.5.2",
+    "version": "0.5.3",
     "url": "https://github.com/Getfling/getfling.github.io/releases/latest/download/Fling-windows.exe"
   }
 }
