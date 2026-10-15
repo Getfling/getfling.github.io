@@ -4,58 +4,146 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Fling</title>
-<meta name="description" content="Throw photos, videos and files between your devices in one motion.">
+<meta name="description" content="Throw photos, videos and files off the edge of one screen and they land on the other. Phone, Mac, Windows. Your own Wi‑Fi, end‑to‑end encrypted.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
 <style>
-  :root { --canvas:#f2f2f2; --ink:#111; --text:#111; --secondary:#6b6b6b; --chip:#e9e9e9; --panel:#fff; --hair:#e4e4e4; }
-  * { box-sizing:border-box; }
-  body { margin:0; background:var(--canvas); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"Inter","Segoe UI",Roboto,sans-serif; -webkit-font-smoothing:antialiased; }
-  main { max-width:520px; margin:0 auto; padding:56px 20px 64px; }
-  h1 { font-size:44px; letter-spacing:-1px; margin:0 0 10px; }
-  p.lead { font-size:17px; color:var(--secondary); margin:0 0 28px; line-height:1.4; }
-  .panel { background:var(--panel); border-radius:26px; padding:18px; box-shadow:0 14px 40px rgba(0,0,0,.08); margin-bottom:14px; }
-  .row { display:flex; align-items:center; gap:14px; padding:10px 4px; }
-  .row + .row { border-top:1px solid var(--hair); }
-  .icon { width:44px; height:44px; border-radius:12px; background:var(--chip); display:grid; place-items:center; font-size:20px; flex:none; }
-  .name { font-weight:600; font-size:16px; }
-  .sub { color:var(--secondary); font-size:13px; }
-  .grow { flex:1; min-width:0; }
-  a.pill { display:inline-block; background:var(--ink); color:#fff; text-decoration:none; border-radius:999px; padding:10px 18px; font-weight:600; font-size:14px; white-space:nowrap; }
-  a.pill.big { padding:16px 26px; font-size:17px; width:100%; text-align:center; }
-  a.small { color:var(--secondary); font-size:13px; text-decoration:none; border-bottom:1px solid var(--hair); }
-  .muted { color:var(--secondary); font-size:13px; line-height:1.45; }
-  details summary { cursor:pointer; color:var(--secondary); font-size:13px; }
-  code { background:var(--chip); border-radius:6px; padding:1px 6px; }
+  :root{
+    --canvas:#e5e5e5; --paper:#fff; --mist:#f3f3f3; --ash:#c6c6c6; --smoke:#979797; --slate:#444; --carbon:#000; --mint:#d1ffca; --volt:#fff100;
+    --display:'Anton', Impact, 'Arial Narrow', sans-serif; --ui:'Inter', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; --mono:'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  *{box-sizing:border-box} html{scroll-behavior:smooth}
+  body{margin:0;background:var(--canvas);color:var(--carbon);font-family:var(--ui);font-size:16px;line-height:1.25;letter-spacing:-0.01em;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+  /* nav */
+  header{height:8rem;display:flex;align-items:center}
+  .nav{display:flex;align-items:center;justify-content:space-between;width:100%}
+  .brand{font-family:var(--display);font-size:28px;letter-spacing:-0.02em;text-transform:uppercase;text-decoration:none}
+  .pill{background:var(--paper);border-radius:48px;padding:10px 10px 10px 24px;display:flex;align-items:center;gap:24px}
+  .pill nav{display:flex;gap:24px} .pill nav a{text-decoration:none;color:var(--slate);font-weight:500;font-size:16px}
+  .btn{display:inline-flex;align-items:center;gap:10px;background:var(--carbon);color:#fff;text-decoration:none;border-radius:8px;padding:14px 24px;font-weight:500;font-size:16px;white-space:nowrap;border:0;cursor:pointer}
+  .btn.big{padding:20px 28px;font-size:18px;border-radius:12px}
+  .btn.ghost{background:transparent;color:var(--slate);border:1.5px solid var(--slate);border-radius:4px}
+  .btn[aria-disabled="true"]{opacity:.35;pointer-events:none}
+  .tag{display:inline-block;background:var(--mint);color:var(--carbon);border-radius:64px;padding:6px 14px;font-family:var(--mono);font-size:12px;letter-spacing:-0.03em}
+  .tag.volt{background:var(--volt)}
+  .mono{font-family:var(--mono);font-size:12px;letter-spacing:-0.03em;color:var(--smoke)}
+  /* hero */
+  .hero{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center;padding:24px 0 80px}
+  h1{font-family:var(--display);font-weight:400;text-transform:uppercase;line-height:.9;letter-spacing:-0.03em;font-size:clamp(64px,10.5vw,130px);margin:16px 0 24px}
+  .lede{font-size:20px;line-height:1.3;color:var(--slate);max-width:520px;margin:0 0 32px}
+  .card{background:var(--paper);border-radius:32px;padding:24px}
+  .primary{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+  .primary .meta{flex:1;min-width:200px} .primary .name{font-weight:500;font-size:20px;line-height:1.2} .primary .sub{color:var(--smoke);font-size:14px;margin-top:4px}
+  .note{color:var(--slate);font-size:14px;line-height:1.4;margin:14px 0 0;max-width:560px}
+  .art{aspect-ratio:1/1;max-height:560px;width:100%;}
+  /* sections */
+  section{padding:80px 0} .eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+  h2{font-family:var(--display);font-weight:400;text-transform:uppercase;line-height:.9;letter-spacing:-0.03em;font-size:clamp(44px,6vw,80px);margin:0 0 40px}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .dev{display:flex;flex-direction:column;gap:24px;min-height:300px} .dev h3{font-weight:500;text-transform:uppercase;font-size:40px;line-height:1.1;letter-spacing:-0.02em;margin:0} .dev p{margin:0;color:var(--slate);flex:1}
+  .dev .foot{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .dark{background:var(--carbon);color:#fff;border-radius:64px 64px 0 0;padding:96px 0 80px;margin-top:40px}
+  .dark h2{color:#fff} .dark .mono{color:var(--smoke)}
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .step{border:1px solid #2f2f2f;border-radius:24px;padding:24px;min-height:220px;display:flex;flex-direction:column;gap:16px}
+  .step h3{font-weight:500;text-transform:uppercase;font-size:28px;letter-spacing:-0.02em;margin:0;line-height:1.1} .step p{margin:0;color:var(--smoke);flex:1}
+  .notes{display:grid;grid-template-columns:repeat(3,1fr);gap:16px} .notes .card h4{margin:0 0 8px;font-weight:500;text-transform:uppercase;font-size:18px} .notes .card p{margin:0;color:var(--slate);font-size:15px;line-height:1.45}
+  footer{background:var(--carbon);color:var(--smoke);padding:32px 0;font-size:14px} footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  @media (max-width:900px){ .hero{grid-template-columns:1fr} .grid,.steps,.notes{grid-template-columns:1fr} header{height:6rem} .pill nav{display:none} .art{max-height:360px} .dark{border-radius:40px 40px 0 0} }
 </style>
 </head>
 <body>
-<main>
-  <h1>Fling</h1>
-  <p class="lead">Throw a photo, a video or a file off the edge of one screen and it lands on the other. Your own Wi‑Fi, end‑to‑end encrypted, nothing in the cloud.</p>
+<header class="wrap">
+  <div class="nav">
+    <a class="brand" href="#">Fling</a>
+    <div class="pill"><nav><a href="#devices">Devices</a><a href="#how">How it works</a><a href="#notes">First run</a></nav><a class="btn" id="nav-dl" href="#devices">Download</a></div>
+  </div>
+</header>
 
-  <div class="panel" id="primary">
-    <div class="row">
-      <div class="icon" id="p-icon">⬇︎</div>
-      <div class="grow"><div class="name" id="p-name">Detecting your device…</div><div class="sub" id="p-sub"></div></div>
+<main class="wrap">
+  <section class="hero" style="padding-top:0">
+    <div>
+      <span class="tag" id="hero-tag">PHONE ↔ MAC ↔ WINDOWS</span>
+      <h1>Throw it.<br>It lands.</h1>
+      <p class="lede">Flick a photo, a video or a file off the edge of one screen and it arrives on the other, in one motion. Your own Wi‑Fi. End‑to‑end encrypted. Nothing in the cloud.</p>
+      <div class="card primary" id="primary">
+        <div class="meta"><div class="name" id="p-name">Detecting your device…</div><div class="sub" id="p-sub"></div></div>
+        <a class="btn big" id="p-link" href="#devices">Download</a>
+        <p class="note" id="p-note"></p>
+      </div>
     </div>
-    <div style="padding:8px 4px 2px"><a class="pill big" id="p-link" href="#">Download</a></div>
-    <div class="muted" id="p-note" style="padding:10px 4px 0"></div>
-  </div>
+    <div class="art" aria-hidden="true">
+      <!-- a card leaving the phone's top edge and landing on the laptop: flat, monochrome, one mint tag -->
+      <svg viewBox="0 0 560 560" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+        <defs><clipPath id="lap"><rect x="60" y="60" width="440" height="268" rx="22"/></clipPath><clipPath id="ph"><rect x="340" y="296" width="160" height="300" rx="26"/></clipPath></defs>
+        <!-- laptop -->
+        <rect x="48" y="48" width="464" height="292" rx="30" fill="#000"/>
+        <rect x="60" y="60" width="440" height="268" rx="22" fill="#fff"/>
+        <g clip-path="url(#lap)">
+          <rect x="60" y="60" width="440" height="268" fill="#f3f3f3"/>
+          <rect x="92" y="96" width="150" height="14" rx="7" fill="#c6c6c6"/><rect x="92" y="122" width="96" height="14" rx="7" fill="#e5e5e5"/>
+          <!-- landed card -->
+          <g transform="rotate(-6 300 210)"><rect x="230" y="150" width="150" height="112" rx="14" fill="#000"/><rect x="238" y="158" width="134" height="80" rx="9" fill="#e5e5e5"/><rect x="238" y="246" width="60" height="8" rx="4" fill="#979797"/></g>
+        </g>
+        <rect x="20" y="340" width="520" height="16" rx="8" fill="#000"/>
+        <!-- phone -->
+        <rect x="328" y="284" width="184" height="324" rx="34" fill="#000"/>
+        <rect x="340" y="296" width="160" height="300" rx="26" fill="#fff"/>
+        <g clip-path="url(#ph)">
+          <rect x="340" y="296" width="160" height="300" fill="#f3f3f3"/>
+          <rect x="356" y="324" width="56" height="10" rx="5" fill="#c6c6c6"/>
+          <rect x="356" y="350" width="128" height="86" rx="12" fill="#e5e5e5"/><rect x="356" y="448" width="128" height="86" rx="12" fill="#e5e5e5"/>
+          <!-- the card crossing the top edge -->
+          <g transform="rotate(8 420 300)"><rect x="372" y="258" width="112" height="84" rx="12" fill="#000"/><rect x="378" y="264" width="100" height="60" rx="8" fill="#d1ffca"/></g>
+        </g>
+        <!-- motion ticks -->
+        <path d="M312 262 c-28 -70 -40 -120 -30 -170" stroke="#000" stroke-width="3" fill="none" stroke-linecap="round" stroke-dasharray="2 12"/>
+        <circle cx="282" cy="92" r="6" fill="#d1ffca" stroke="#000" stroke-width="3"/>
+      </svg>
+    </div>
+  </section>
 
-  <div class="panel">
-    <div class="row"><div class="icon">💻</div><div class="grow"><div class="name">Mac</div><div class="sub">macOS 14 or later</div></div><a class="pill" href="https://github.com/Getfling/getfling.github.io/releases/latest/download/Fling-mac.zip">Download</a></div>
-    <div class="row"><div class="icon">📱</div><div class="grow"><div class="name">Android</div><div class="sub">Android 13 or later · APK</div></div><a class="pill" href="https://github.com/Getfling/getfling.github.io/releases/latest/download/Fling-android.apk">Download</a></div>
-    <div class="row"><div class="icon">🖥️</div><div class="grow"><div class="name">Windows</div><div class="sub" id="win-sub">Windows 10 or later · installer</div></div><a class="pill" id="win-link" href="https://github.com/Getfling/getfling.github.io/releases/latest/download/Fling-windows.exe">Download</a></div>
-    <div class="row"><div class="icon">📲</div><div class="grow"><div class="name">iPhone</div><div class="sub">Not yet</div></div></div>
-  </div>
-
-  <details class="panel"><summary>First‑time notes</summary>
-    <p class="muted"><b>Mac:</b> unzip, drag Fling to Applications, open it. macOS will say it can’t check the developer the first time: go to System Settings → Privacy &amp; Security and click <b>Open Anyway</b>. Once.</p>
-    <p class="muted"><b>Android:</b> open the downloaded APK. Allow “install from this source” once, then Install. Fling asks for its few permissions on first launch.</p>
-    <p class="muted"><b>Windows:</b> run the installer; on the “Windows protected your PC” screen click <b>More info → Run anyway</b>. Once.</p>
-    <p class="muted"><b>Pairing:</b> open Fling on both devices on the same Wi‑Fi. One shows a 6‑digit code, you type it on the other. After that they find each other on their own.</p>
-  </details>
-  <p class="muted">Updates: each app tells you when a newer version is here and installs it with one tap.</p>
+  <section id="devices" style="padding-top:0">
+    <div class="eyebrow"><span class="tag">ALL DEVICES</span><span class="mono">ONE APP · ONE MOTION</span></div>
+    <h2>Pick your<br>device.</h2>
+    <div class="grid">
+      <div class="card dev"><span class="mono">01 · MACOS 14+</span><h3>Mac</h3><p>Menu‑bar app. Drop onto the window or the screen edge; items land as cards you can open, reveal or throw back.</p><div class="foot"><span class="mono" id="mac-ver"></span><a class="btn" id="mac-link" href="https://github.com/Getfling/getfling.github.io/releases/latest/download/Fling-mac.zip">Download</a></div></div>
+      <div class="card dev"><span class="mono">02 · ANDROID 13+</span><h3>Android</h3><p>Flick from the launchpad, the share sheet or a Quick Settings tile. Incoming items land on top of whatever you're doing.</p><div class="foot"><span class="mono" id="and-ver"></span><a class="btn" id="and-link" href="https://github.com/Getfling/getfling.github.io/releases/latest/download/Fling-android.apk">Download APK</a></div></div>
+      <div class="card dev"><span class="mono">03 · WINDOWS 10+</span><h3>Windows</h3><p>Tray app with the same edge drop zone, glide‑in cards and one‑tap pairing.</p><div class="foot"><span class="mono" id="win-ver"></span><a class="btn" id="win-link" href="https://github.com/Getfling/getfling.github.io/releases/latest/download/Fling-windows.exe">Download</a></div></div>
+    </div>
+    <p class="mono" style="margin-top:16px">iPhone: <span class="tag volt">NOT YET</span></p>
+  </section>
 </main>
+
+<section class="dark" id="how">
+  <div class="wrap">
+    <div class="eyebrow"><span class="mono">HOW IT WORKS</span></div>
+    <h2>Pair once.<br>Then just flick.</h2>
+    <div class="steps">
+      <div class="step"><span class="mono">01</span><h3>Pair once</h3><p>Open Fling on both devices on the same Wi‑Fi. One shows a six‑digit code, you type it on the other. After that they find each other on their own.</p></div>
+      <div class="step"><span class="mono">02</span><h3>Flick it off the edge</h3><p>Pick a photo, a video, a file or a link and throw it toward the other device. It leaves your screen the moment it crosses the edge.</p></div>
+      <div class="step"><span class="mono">03</span><h3>It lands</h3><p>The card glides in on the other screen with the same speed and angle, sharp preview first, full file right behind it. Open, save, share or throw it back.</p></div>
+    </div>
+  </div>
+</section>
+
+<main class="wrap">
+  <section id="notes">
+    <div class="eyebrow"><span class="tag">FIRST RUN</span><span class="mono">ONCE PER DEVICE</span></div>
+    <h2>Three clicks,<br>then never again.</h2>
+    <div class="notes">
+      <div class="card"><h4>Mac</h4><p>Unzip, drag Fling to Applications, open it. macOS says it can't check the developer: go to System Settings → Privacy &amp; Security → <b>Open Anyway</b>. Once.</p></div>
+      <div class="card"><h4>Android</h4><p>Open the APK, allow “install from this source” once, Install. Fling asks for its few permissions on first launch, each row turns into a check.</p></div>
+      <div class="card"><h4>Windows</h4><p>Run the installer. On “Windows protected your PC” click <b>More info → Run anyway</b>. If Windows asks about the firewall, allow private networks.</p></div>
+    </div>
+    <p class="note" style="margin-top:24px">Updates: every app tells you when a newer version is here and installs it with one tap.</p>
+  </section>
+</main>
+
+<footer><div class="wrap"><span>Your own Wi‑Fi · end‑to‑end encrypted · nothing goes through the cloud.</span><span class="mono" id="foot-ver">FLING</span></div></footer>
+
 <script>
 (async function () {
   const ua = navigator.userAgent, plat = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || "";
@@ -66,14 +154,19 @@
   let latest = {};
   try { latest = await (await fetch("latest.json", { cache: "no-store" })).json(); } catch (e) {}
   const el = id => document.getElementById(id);
-  function show(icon, name, sub, href, note) { el("p-icon").textContent = icon; el("p-name").textContent = name; el("p-sub").textContent = sub; el("p-link").href = href; el("p-note").textContent = note; }
-  if (isAndroid) show("📱", "Fling for Android", "Version " + ((latest.android||{}).version || "") , (latest.android||{}).url || "#", "Open the file when it finishes downloading, allow “install from this source” once, then Install.");
-  else if (isIOS) { show("📲", "Fling for iPhone", "Not available yet", "#", "iPhone is coming later. Grab the Mac or Android version from the list below for your other devices."); el("p-link").style.opacity=.35; el("p-link").style.pointerEvents="none"; }
-  else if (isMac) show("💻", "Fling for Mac", "Version " + ((latest.mac||{}).version || ""), (latest.mac||{}).url || "#", "Unzip, drag Fling to Applications, open it. The first time, macOS will ask you to confirm under Privacy & Security → Open Anyway.");
-  else if (isWin && (latest.windows||{}).url) show("🖥️", "Fling for Windows", "Version " + latest.windows.version, latest.windows.url, "Run the installer. On the “Windows protected your PC” screen click More info → Run anyway, once.");
-  else if (isWin) { show("🖥️", "Fling for Windows", "Coming soon", "#", "The Windows version is on its way. Mac and Android are ready below."); el("p-link").style.opacity=.35; el("p-link").style.pointerEvents="none"; }
-  else show("⬇︎", "Fling", "Pick your device below", "#", "");
-  if ((latest.windows||{}).url) { el("win-sub").textContent = "Version " + latest.windows.version; const w = el("win-link"); w.href = latest.windows.url; w.style.opacity = 1; w.style.pointerEvents = "auto"; }
+  const v = k => (latest[k] || {}).version || "";
+  const u = k => (latest[k] || {}).url || "";
+  function fill(id, key, fallbackHref) { const l = el(id); if (u(key)) l.href = u(key); else if (!fallbackHref) { l.setAttribute("aria-disabled", "true"); } }
+  el("mac-ver").textContent = v("mac") ? "v" + v("mac") : ""; el("and-ver").textContent = v("android") ? "v" + v("android") : ""; el("win-ver").textContent = v("windows") ? "v" + v("windows") : "SOON";
+  fill("mac-link", "mac", true); fill("and-link", "android", true); if (!u("windows")) el("win-link").setAttribute("aria-disabled", "true");
+  el("foot-ver").textContent = "FLING " + (v("mac") || "");
+  function show(name, sub, href, note) { el("p-name").textContent = name; el("p-sub").textContent = sub; el("p-link").href = href; el("p-note").textContent = note; el("nav-dl").href = href; }
+  if (isAndroid) show("Fling for Android", "APK · v" + v("android"), u("android") || "#devices", "Open the file when it finishes downloading, allow “install from this source” once, then Install.");
+  else if (isIOS) { show("Fling for iPhone", "Not available yet", "#devices", "iPhone is coming later. Grab the Mac, Android or Windows version below for your other devices."); el("p-link").setAttribute("aria-disabled", "true"); el("p-link").textContent = "Not yet"; }
+  else if (isMac) show("Fling for Mac", "Zip · v" + v("mac"), u("mac") || "#devices", "Unzip, drag Fling to Applications, open it. The first time, confirm under Privacy & Security → Open Anyway.");
+  else if (isWin && u("windows")) show("Fling for Windows", "Installer · v" + v("windows"), u("windows"), "Run the installer. On “Windows protected your PC” click More info → Run anyway, once.");
+  else if (isWin) { show("Fling for Windows", "Coming soon", "#devices", "The Windows version is on its way; Mac and Android are ready below."); el("p-link").setAttribute("aria-disabled", "true"); }
+  else show("Fling", "Pick your device below", "#devices", "");
 })();
 </script>
 </body>
