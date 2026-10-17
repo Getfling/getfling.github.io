@@ -125,7 +125,7 @@
     <div class="grid">
       <div class="card dev reveal" style="--i:0"><div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.8"><rect x="3" y="5" width="18" height="12" rx="2"/><path d="M2 19h20"/></svg></div><span class="mono">01 · MACOS 14+</span><h3>Mac</h3><p>Menu‑bar app. Drop onto the window or the screen edge; items land as cards you can open, reveal or throw back.</p><div class="foot"><span class="mono" id="mac-ver"></span><a class="btn" id="mac-link" href="https://github.com/Getfling/getfling.github.io/releases/latest/download/Fling-mac.zip">Download <span class="arr">↓</span></a></div></div>
       <div class="card dev reveal" style="--i:1"><div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.8"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18h2"/></svg></div><span class="mono">02 · ANDROID 13+</span><h3>Android</h3><p>Flick from the launchpad, the share sheet or a Quick Settings tile. Incoming items land on top of whatever you're doing.</p><div class="foot"><span class="mono" id="and-ver"></span><a class="btn" id="and-link" href="https://github.com/Getfling/getfling.github.io/releases/latest/download/Fling-android.apk">Download APK <span class="arr">↓</span></a></div></div>
-      <div class="card dev reveal" style="--i:2"><div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.8"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div><span class="mono">03 · WINDOWS 10+</span><h3>Windows</h3><p>Tray app with the same edge drop zone, glide‑in cards and one‑tap pairing.</p><div class="foot"><span class="mono" id="win-ver"></span><a class="btn" id="win-link" href="https://github.com/Getfling/getfling.github.io/releases/latest/download/Fling-windows.exe">Download <span class="arr">↓</span></a></div></div>
+      <div class="card dev reveal" style="--i:2"><div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.8"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div><span class="mono">03 · WINDOWS 10+</span><h3>Windows</h3><p>Tray app with the same edge drop zone, glide‑in cards and one‑tap pairing.</p><div class="foot"><span class="mono" id="win-ver"></span><a class="btn" id="win-link" href="https://github.com/Getfling/getfling.github.io/releases/latest/download/Fling-windows.zip">Download <span class="arr">↓</span></a></div></div>
     </div>
     <p class="mono reveal" style="margin-top:18px;--i:3">iPhone: <span class="tag volt">NOT YET</span></p>
   </section>
@@ -150,7 +150,7 @@
     <div class="notes">
       <div class="card reveal" style="--i:0"><h4>Mac</h4><p>Unzip, drag Fling to Applications, open it. macOS says it can't check the developer: go to System Settings → Privacy &amp; Security → <b>Open Anyway</b>. Once.</p></div>
       <div class="card reveal" style="--i:1"><h4>Android</h4><p>Open the APK, allow “install from this source” once, Install. Fling asks for its few permissions on first launch, each row turns into a check.</p></div>
-      <div class="card reveal" style="--i:2"><h4>Windows</h4><p>Run the installer. On “Windows protected your PC” click <b>More info → Run anyway</b>. If Windows asks about the firewall, allow private networks.</p></div>
+      <div class="card reveal" style="--i:2"><h4>Windows</h4><p>Unzip, then run the installer. On “Windows protected your PC” click <b>More info → Run anyway</b>, once. If your browser holds the file back (“isn’t commonly downloaded”), open its Downloads panel, click <b>⋯ → Keep → Keep anyway</b>. If Windows asks about the firewall, allow private networks.</p></div>
     </div>
     <p class="note reveal" style="margin-top:24px;--i:3">Updates: every app tells you when a newer version is here and installs it with one tap.</p>
   </section>
@@ -196,13 +196,14 @@
   let latest = {}; try { latest = await (await fetch("latest.json", { cache: "no-store" })).json(); } catch (e) {}
   const v = k => (latest[k] || {}).version || "", u = k => (latest[k] || {}).url || "";
   el("mac-ver").textContent = v("mac") ? "v" + v("mac") : ""; el("and-ver").textContent = v("android") ? "v" + v("android") : ""; el("win-ver").textContent = v("windows") ? "v" + v("windows") : "SOON";
-  if (u("mac")) el("mac-link").href = u("mac"); if (u("android")) el("and-link").href = u("android"); if (u("windows")) el("win-link").href = u("windows"); else el("win-link").setAttribute("aria-disabled", "true");
+  const winZip = u("windows") ? u("windows").replace(/\.exe$/, ".zip") : null;
+  if (u("mac")) el("mac-link").href = u("mac"); if (u("android")) el("and-link").href = u("android"); if (winZip) el("win-link").href = winZip; else el("win-link").setAttribute("aria-disabled", "true");
   el("foot-ver").textContent = "FLING " + (v("mac") || "");
   function show(name, sub, href, note, off) { el("p-name").textContent = name; el("p-sub").textContent = sub; el("p-link").href = href; el("p-note").textContent = note; el("nav-dl").href = href; if (off) { el("p-link").setAttribute("aria-disabled", "true"); el("p-link").textContent = "Not yet"; } }
   if (isAndroid) show("Fling for Android", "APK · v" + v("android"), u("android") || "#devices", "Open the file when it finishes downloading, allow “install from this source” once, then Install.");
   else if (isIOS) show("Fling for iPhone", "Not available yet", "#devices", "iPhone is coming later. Grab the Mac, Android or Windows version below for your other devices.", true);
   else if (isMac) show("Fling for Mac", "Zip · v" + v("mac"), u("mac") || "#devices", "Unzip, drag Fling to Applications, open it. The first time, confirm under Privacy & Security → Open Anyway.");
-  else if (isWin && u("windows")) show("Fling for Windows", "Installer · v" + v("windows"), u("windows"), "Run the installer. On “Windows protected your PC” click More info → Run anyway, once.");
+  else if (isWin && u("windows")) show("Fling for Windows", "Zip · v" + v("windows"), winZip, "Unzip and run the installer. On “Windows protected your PC” click More info → Run anyway, once.");
   else if (isWin) show("Fling for Windows", "Coming soon", "#devices", "The Windows version is on its way; Mac and Android are ready below.", true);
   else show("Fling", "Pick your device below", "#devices", "");
 })();
